@@ -1,8 +1,11 @@
-from flask import Flask, render_tenplate
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from forms import RegistrationForm, LoginForm
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///meublog.db'
+app.config['SECRET_KEY'] = 'edea052eb422c9f1b137f549ad479d0d'
 
 db = SQLAlchemy(app)
 
@@ -17,7 +20,21 @@ class User(db.Model):
 
 @app.route('/')
 def index():
-    return 
+    return render_template('index.html')
+
+
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    form = RegistrationForm()
+    return render_template('register.html', form=form)
+
+@app.route('/login')
+def login():
+    form = LoginForm()
+    return render_template('login.html', form=form)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
